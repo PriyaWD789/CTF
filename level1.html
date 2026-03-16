@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Level 1 ~ Misaligned Counter | CTF</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-back">&larr; Back</a>
+    <span class="navbar-level">Level 01</span>
+    <span class="navbar-brand">CTF</span>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════
+       BUG: The container uses "justify-left" instead of
+            "justify-center". Contestants must change the
+            class to "justify-center" via DevTools.
+       ══════════════════════════════════════════════════ -->
+  <main class="page-center justify-left" id="level-container">
+
+    <div class="card">
+      <div class="bug-tag">
+        <span class="status-dot red"></span>
+        BUG DETECTED &mdash; Layout broken
+      </div>
+
+      <h1 class="card-title">Counter v1.0</h1>
+      <p class="card-subtitle">Something looks off&hellip; can you center it?</p>
+
+      <div class="counter-display">
+        <div class="counter-value" id="count">0</div>
+        <div class="counter-label">Current Count</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" onclick="changeCount(-1)">&minus;</button>
+        <button class="btn btn-reset" onclick="resetCount()">Reset</button>
+        <button class="btn" onclick="changeCount(1)">+</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── Passed Overlay ── -->
+  <div class="passed-overlay" id="passed-overlay">
+    <div class="passed-checkmark">
+      <svg viewBox="0 0 40 40"><polyline points="10 21 18 29 30 13" /></svg>
+    </div>
+    <div class="passed-title">Passed</div>
+    <div class="passed-subtitle">Level 01 Complete</div>
+    <div class="passed-flag">
+      <div class="passed-flag-label">Flag Captured</div>
+      <div class="passed-flag-code">CTF{c3nt3r_0f_th3_un1v3rs3}</div>
+    </div>
+    <div class="passed-actions">
+      <a href="index.html" class="btn">&larr; Levels</a>
+      <a href="level2.html" class="btn" style="border-color:rgba(0,170,255,0.4); color:#00aaff;">Next Level &rarr;</a>
+    </div>
+  </div>
+
+  <script>
+    let count = 0;
+
+    function changeCount(delta) {
+      count += delta;
+      const el = document.getElementById('count');
+      el.textContent = count;
+      el.classList.add('bump');
+      setTimeout(() => el.classList.remove('bump'), 150);
+    }
+
+    function resetCount() {
+      count = 0;
+      document.getElementById('count').textContent = count;
+    }
+
+    /* ── Flag checker ── */
+    const container = document.getElementById('level-container');
+
+    const observer = new MutationObserver(() => {
+      if (container.classList.contains('justify-center') &&
+          !container.classList.contains('justify-left')) {
+        document.getElementById('passed-overlay').classList.add('show');
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(container, { attributes: true, attributeFilter: ['class'] });
+  </script>
+
+</body>
+</html>

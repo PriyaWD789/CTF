@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Level 2 ~ Broken Buttons | CTF</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-back">&larr; Back</a>
+    <span class="navbar-level">Level 02</span>
+    <span class="navbar-brand">CTF</span>
+  </nav>
+
+  <main class="page-center justify-center">
+
+    <div class="card">
+      <div class="bug-tag">
+        <span class="status-dot red"></span>
+        BUG DETECTED &mdash; Buttons disconnected
+      </div>
+
+      <h1 class="card-title">Counter v2.0</h1>
+      <p class="card-subtitle">The buttons don't update the counter&hellip;</p>
+
+      <div class="counter-display">
+        <!-- ═══════════════════════════════════════
+             BUG: The counter has id="counter-output"
+             but the JS targets id="count". Contestants
+             must change the id to "count" via DevTools.
+             ═══════════════════════════════════════ -->
+        <div class="counter-value" id="counter-output">0</div>
+        <div class="counter-label">Current Count</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" id="btn-dec">&minus;</button>
+        <button class="btn btn-reset" id="btn-reset">Reset</button>
+        <button class="btn" id="btn-inc">+</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── Passed Overlay ── -->
+  <div class="passed-overlay" id="passed-overlay">
+    <div class="passed-checkmark">
+      <svg viewBox="0 0 40 40"><polyline points="10 21 18 29 30 13" /></svg>
+    </div>
+    <div class="passed-title">Passed</div>
+    <div class="passed-subtitle">Level 02 Complete</div>
+    <div class="passed-flag">
+      <div class="passed-flag-label">Flag Captured</div>
+      <div class="passed-flag-code">CTF{r3c0nn3ct_th3_w1r3s}</div>
+    </div>
+    <div class="passed-actions">
+      <a href="index.html" class="btn">&larr; Levels</a>
+      <a href="level3.html" class="btn" style="border-color:rgba(0,170,255,0.4); color:#00aaff;">Next Level &rarr;</a>
+    </div>
+  </div>
+
+  <script>
+    let count = 0;
+
+    /* The JS looks for id="count" — but the HTML has id="counter-output" */
+    function updateDisplay() {
+      const el = document.getElementById('count');
+      if (!el) return;
+      el.textContent = count;
+      el.classList.add('bump');
+      setTimeout(() => el.classList.remove('bump'), 150);
+    }
+
+    document.getElementById('btn-inc').addEventListener('click', () => {
+      count++;
+      updateDisplay();
+      checkFlag();
+    });
+
+    document.getElementById('btn-dec').addEventListener('click', () => {
+      count--;
+      updateDisplay();
+      checkFlag();
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      count = 0;
+      updateDisplay();
+    });
+
+    /* ── Flag checker ── */
+    function checkFlag() {
+      const el = document.getElementById('count');
+      if (el && el.textContent !== '0') {
+        document.getElementById('passed-overlay').classList.add('show');
+      }
+    }
+  </script>
+
+</body>
+</html>

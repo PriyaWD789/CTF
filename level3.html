@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Level 3 ~ Broken Login | CTF</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-back">&larr; Back</a>
+    <span class="navbar-level">Level 03</span>
+    <span class="navbar-brand">CTF</span>
+  </nav>
+
+  <main class="page-center justify-center">
+
+    <div class="card" id="login-card">
+      <div class="bug-tag">
+        <span class="status-dot red"></span>
+        BUG DETECTED &mdash; Login broken
+      </div>
+
+      <h1 class="card-title">Secure Login</h1>
+      <p class="card-subtitle">The login button doesn't go anywhere&hellip;</p>
+
+      <form onsubmit="return false;">
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input class="form-input" type="text" id="username" placeholder="agent_name" autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input class="form-input" type="password" id="password" placeholder="••••••••" />
+        </div>
+
+        <!-- ═══════════════════════════════════════════
+             BUG: The <a> tag has href="#" instead of
+             pointing to "dashboard.html". Contestants
+             must change href to "dashboard.html".
+             ═══════════════════════════════════════════ -->
+        <a href="#" id="login-btn" class="btn btn-primary" style="display:block; text-align:center; text-decoration:none; margin-top:8px;">
+          Login &rarr;
+        </a>
+      </form>
+    </div>
+
+  </main>
+
+  <!-- ── Passed Overlay ── -->
+  <div class="passed-overlay" id="passed-overlay">
+    <div class="passed-checkmark">
+      <svg viewBox="0 0 40 40"><polyline points="10 21 18 29 30 13" /></svg>
+    </div>
+    <div class="passed-title">Passed</div>
+    <div class="passed-subtitle">Level 03 Complete</div>
+    <div class="passed-flag">
+      <div class="passed-flag-label">Flag Captured</div>
+      <div class="passed-flag-code">CTF{hr3f_h4ck3r_pr0}</div>
+    </div>
+    <div class="passed-actions">
+      <a href="index.html" class="btn">&larr; Levels</a>
+    </div>
+  </div>
+
+  <script>
+    /* ── Flag checker ── */
+    /* Watch for href changes on the login button */
+    const loginBtn = document.getElementById('login-btn');
+
+    const observer = new MutationObserver(() => {
+      const href = loginBtn.getAttribute('href');
+      if (href && href !== '#' && href.includes('dashboard')) {
+        document.getElementById('passed-overlay').classList.add('show');
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(loginBtn, { attributes: true, attributeFilter: ['href'] });
+
+    /* Also intercept click in case they change href and click */
+    loginBtn.addEventListener('click', (e) => {
+      const href = loginBtn.getAttribute('href');
+      if (href && href !== '#' && href.includes('dashboard')) {
+        e.preventDefault();
+        document.getElementById('passed-overlay').classList.add('show');
+      }
+    });
+  </script>
+
+</body>
+</html>
